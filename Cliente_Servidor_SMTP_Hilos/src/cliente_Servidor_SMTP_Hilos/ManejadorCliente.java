@@ -29,7 +29,8 @@ public class ManejadorCliente implements Runnable {
 
     @Override
     public void run() {
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        try (BufferedReader in = new BufferedReader(
+        		new InputStreamReader(socket.getInputStream()));
              PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
 
             // Obtener datos del cliente
@@ -45,21 +46,30 @@ public class ManejadorCliente implements Runnable {
             String cuerpo = in.readLine();
 
             // Configurar propiedades y enviar el correo
-            String email = "Cristhian.leiva.cruz@gmail.com"; // Cambia esto con tu dirección de correo
-            String password = "quhbbrookxksutel"; // Cambia esto con tu contraseña
+            String email = "Cristhian.leiva.cruz@blablablabala.com"; //Tu dirección de correo
+            String password = "quhbbrookxksutel"; // tu contraseña 
 
             Properties properties = new Properties();
-            createEmail(properties, email, destinatarios, asunto, cuerpo, password);
-
-            // Enviar confirmación al cliente
+            try {
+            createEmail(properties, email, destinatarios,
+            		asunto, cuerpo, password);
             out.println("Correo enviado correctamente");
+            }catch(MessagingException e) {
+            	e.printStackTrace();
+            	out.println("No se puedo enviar el correo correctamente");
+            }
+            // Enviar confirmación al cliente
+            
 
         } catch (IOException e) {
             e.printStackTrace();
+            
         }
     }
 
-    public void createEmail(Properties properties, String email, List<String> destinatarios, String asunto, String cuerpo, String password) {
+    public void createEmail(Properties properties, String email,
+    						List<String> destinatarios, String asunto,
+    						String cuerpo, String password) throws MessagingException {
         properties.put("mail.smtp.host", "smtp.gmail.com");
         properties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
         properties.setProperty("mail.smtp.starttls.enable", "true");
@@ -70,13 +80,14 @@ public class ManejadorCliente implements Runnable {
 
         Session mSession = Session.getDefaultInstance(properties);
 
-        try {
+       
             MimeMessage mCorreo = new MimeMessage(mSession);
             mCorreo.setFrom(new InternetAddress(email));
 
             // Agregar múltiples destinatarios
             for (String destinatario : destinatarios) {
-                mCorreo.addRecipient(Message.RecipientType.TO, new InternetAddress(destinatario));
+                mCorreo.addRecipient(Message.RecipientType.TO,
+                		new InternetAddress(destinatario));
             }
 
             mCorreo.setSubject(asunto);
@@ -84,22 +95,16 @@ public class ManejadorCliente implements Runnable {
 
             sendEmail(mSession, email, password, mCorreo);
 
-        } catch (AddressException e) {
-            e.printStackTrace();
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
+        
     }
-    public void sendEmail(Session mSession, String email, String password, MimeMessage mCorreo) {
-        try {
+    public void sendEmail(Session mSession, String email, 
+    		String password, MimeMessage mCorreo) throws MessagingException {
+     
             Transport mTransport = mSession.getTransport("smtp");
             mTransport.connect(email, password);
-            mTransport.sendMessage(mCorreo, mCorreo.getRecipients(Message.RecipientType.TO));
+            mTransport.sendMessage(mCorreo,
+            		mCorreo.getRecipients(Message.RecipientType.TO));
             mTransport.close();
-        } catch (NoSuchProviderException e) {
-            e.printStackTrace();
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
+      
     }
 }

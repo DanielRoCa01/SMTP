@@ -105,8 +105,10 @@ public class Cliente extends JFrame {
 	    final String HOST = "127.0.0.1";
 	    
 	    try (Socket sc = new Socket(HOST, PUERTO_SMTP);
-	         BufferedReader in = new BufferedReader(new InputStreamReader(sc.getInputStream()));
-	         PrintWriter out = new PrintWriter(sc.getOutputStream(), true)) {
+	         BufferedReader in = new BufferedReader(
+	        		 new InputStreamReader(sc.getInputStream()));
+	        PrintWriter out = new PrintWriter(sc.getOutputStream(),  
+	        		 true)) {
 
 	        // Enviar datos del correo al servidor SMTP
 	        for (String destinatario : destinatarios) {
@@ -118,9 +120,11 @@ public class Cliente extends JFrame {
 	        out.println(textField_Asunto.getText());
 	        out.println(textArea_Cuerpo.getText());
 
-	        // Leer la respuesta del servidor (puedes personalizar esto según tus necesidades)
+	        // Leer la respuesta del servidor
+	        //(puedes personalizar esto según tus necesidades)
 	        String respuestaServidor;
-	        while ((respuestaServidor = in.readLine()) != null && !respuestaServidor.equals("Fin de la lista")) {
+	        while ((respuestaServidor = in.readLine()) != null
+	        		&& !respuestaServidor.equals("Fin de la lista")) {
 	            System.out.println("Respuesta del servidor: " + respuestaServidor);
 	        }
 
@@ -134,15 +138,19 @@ public class Cliente extends JFrame {
 	        public void actionPerformed(ActionEvent e) {
 	            String correosTexto = textField_Para.getText();
 
-	            // Separar direcciones de correo electrónico usando punto y coma como delimitador
+	            // Separar direcciones de correo electrónico usando punto 
+	            //y coma como delimitador
 	            List<String> destinatarios = Arrays.asList(correosTexto.split(";"));
 
 	            // Validar todos los correos electrónicos ingresados
-	            if (destinatarios.stream().allMatch(Cliente.this::validarCorreoElectronico)) {
+	            if 
+	            (destinatarios.stream().allMatch(Cliente.this::validarCorreoElectronico)){
 	                establecerConexion(destinatarios);
 	            } else {
 	                // Mostrar mensaje de error si algún correo electrónico no es válido
-	                JOptionPane.showMessageDialog(null, "Uno o más correos electrónicos no son válidos", "Error", JOptionPane.ERROR_MESSAGE);
+	                JOptionPane.showMessageDialog(null,
+	                		"Uno o más correos electrónicos no son válidos",
+	                		"Error", JOptionPane.ERROR_MESSAGE);
 	            }
 	        }
 	    });

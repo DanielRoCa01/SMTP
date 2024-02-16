@@ -69,7 +69,8 @@ public class ManejadorCliente implements Runnable {
 
     public void createEmail(Properties properties, String email,
     						List<String> destinatarios, String asunto,
-    						String cuerpo, String password) throws MessagingException {
+    						String cuerpo, String password) 
+    								throws MessagingException {
         properties.put("mail.smtp.host", "smtp.gmail.com");
         properties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
         properties.setProperty("mail.smtp.starttls.enable", "true");

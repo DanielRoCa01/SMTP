@@ -46,7 +46,7 @@ public class ManejadorCliente implements Runnable {
             String cuerpo = in.readLine();
 
             // Configurar propiedades y enviar el correo
-            String email = "Cristhian.leiva.cruz@blablablabala.com"; //Tu dirección de correo
+            String email = "Cristhian.leiva.cruz@gmail.com"; //Tu dirección de correo
             String password = "quhbbrookxksutel"; // tu contraseña 
 
             Properties properties = new Properties();
